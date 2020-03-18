@@ -4,6 +4,7 @@ using namespace std;
 
 // basic question - When to use segment tree instead of prefix sum?
 
+int lazy[1000]  = {0};
 
 int query(int *tree, int ss, int se, int qs, int qe, int index){
     // queries -
@@ -74,6 +75,83 @@ void updateRange(int *tree,int ss,int se,int l,int r,int inc,int index){
     
     tree[index] = min(tree[2*index],tree[2*index+1]);
     return;
+}
+
+
+
+int queryLazy(int *tree,int ss,int se,int qs,int qe,int index){
+    // First step - resolve the Lazy value
+    if(lazy[index]!=0){
+        tree[index] += lazy[index];
+        if(ss!=se){
+            lazy[2*index+1]  += lazy[index];
+            lazy[2*index] += lazy[index];
+        }
+        lazy[index] = 0;
+    }
+    
+    
+    //No Overlap 
+    if(ss>qe || se<qs){
+        return INT_MAX;
+    }
+    
+    // Complete Overlap 
+    if(ss>=qs && se<=qe){
+        
+        return tree[index];
+    }
+    
+    
+    //Partial 
+    int mid = (ss+se)/2;
+    int left = queryLazy(tree,ss,mid,qs,qe,2*index);
+    int right = queryLazy(tree,mid+1,se,qs,qe,2*index+1);
+    
+    return min(left,right);
+    
+    
+}
+
+void updateRangeLazy(int *tree,int ss,int se,int l,int r,int inc,int index){
+    //First Step - Never we go down if you have lazy value at node, first resolve it 
+    
+    if(lazy[index]!=0){
+        
+        tree[index] += lazy[index];
+        
+        //if not a leaf node 
+        if(ss!=se){
+            lazy[2*index] += lazy[index];
+            lazy[2*index+1] += lazy[index];
+        }
+        lazy[index] = 0;
+    }
+    
+    // Out of Bounds 
+    if(ss>r || l > se){
+        return;
+    }
+    // Complete Overlap- Beeche Raste Mei hi Return krna 
+    if(ss>=l && se<=r){
+        tree[index] += inc;
+        
+        // Pass the lazy value to children 
+        if(ss!=se){
+            lazy[2*index] +=  inc;
+            lazy[2*index+1] += inc;
+        }
+    return;
+    }
+    
+    //Call on Left and Right 
+    int mid = (ss+se)/2;
+    updateRangeLazy(tree,ss,mid,l,r,inc,2*index);
+    updateRangeLazy(tree,mid+1,se,l,r,inc,2*index+1);
+    tree[index] = min(tree[2*index],tree[2*index+1]);
+    
+    return;
+    
 }
 
 
