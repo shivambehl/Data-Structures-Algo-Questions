@@ -30,7 +30,7 @@ void updateNode(int *tree, int ss, int se, int i, int increment, int index){
     if(i > se || i < ss){
         return;
     }
-    if(ss = se){
+    if(ss == se){
         tree[index] += increment;
         return;
     }
