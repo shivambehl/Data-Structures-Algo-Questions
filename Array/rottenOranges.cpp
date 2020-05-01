@@ -1,3 +1,8 @@
+// Rotton Oranges - GeeksforGeeks, LeetCode
+// Link -> https://practice.geeksforgeeks.org/problems/rotten-oranges/0
+// Link -> https://leetcode.com/problems/rotting-oranges/ (Not Submitted Yet)
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -5,27 +10,79 @@ int m[101][101];
 int r, c;
 
 
-int rot(int i, int j, int s){ // s -> starting time
+bool check(int a, int b){
+	if(a >= r || a < 0
+	|| b >= c || b < 0){
+		return false;
+	} 
+	else
+		return true;
+}
 
-		//cout<<"Charms "<<i<<" "<<j<<" "<<s<<endl;
-		int a = 0, b = 0, k = 0, d = 0;
-		if(m[i-1][j] == 1 && i > 0 ){
-			m[i-1][j] = 2;
-			a = rot(i-1, j, s+1);
+
+int fun(){
+	int count = 0;
+	pair<int, int> del = make_pair(-1, -1);
+	queue<pair<int, int> > q;
+	for(int i = 0; i<r; i++){
+		for(int j = 0; j<c; j++){
+			if(m[i][j] == 2){
+				q.push(make_pair(i, j));
+			}
 		}
-		if(m[i][j-1] == 1 && j > 0){
-			m[i][j-1] = 2;
-			b = rot(i, j-1, s+1);
+	}
+	
+	q.push(del);
+	
+	while(!q.empty()){
+		while(!q.empty() && q.front() != del){
+			pair<int, int> a = q.front();
+			q.pop();
+			
+			if(check(a.first -1, a.second) && m[a.first - 1][a.second] == 1){
+				q.push(make_pair(a.first - 1, a.second));
+				m[a.first -1][a.second] = 2;
+				
+				//cout<<"("<<a.first<<","<<a.second<<")"<<" -> "<<1<<endl;
+			}
+				
+				
+			if(check(a.first + 1, a.second) && m[a.first + 1][a.second] == 1){
+				q.push(make_pair(a.first + 1, a.second));
+				m[a.first + 1][a.second] = 2;
+				
+				//cout<<"("<<a.first<<","<<a.second<<")"<<" -> "<<2<<endl;
+			}
+				
+			
+			if(check(a.first, a.second - 1) && m[a.first][a.second - 1] == 1){
+				q.push(make_pair(a.first, a.second - 1));
+				m[a.first][a.second -1] = 2;
+				
+				//cout<<"("<<a.first<<","<<a.second<<")"<<" -> "<<3<<endl;
+			}
+				
+			
+			if(check(a.first, a.second + 1) && m[a.first][a.second + 1] == 1){
+				q.push(make_pair(a.first, a.second + 1));
+				m[a.first][a.second +1 ] = 2;
+				
+				//cout<<"("<<a.first<<","<<a.second<<")"<<" -> "<<4<<endl;
+			}
+				
 		}
-		if(m[i+1][j] == 1 && i+1 < r){
-			m[i+1][j] = 2;
-			k = rot(i+1, j, s+1);
+		
+		if(!q.empty() && q.front() == del ){
+			q.pop();
+			
+			if(!q.empty()){
+				count++;
+				q.push(del);
+			}
+				
 		}
-		if(m[i][j+1] == 1 && j+1 < c){
-			m[i][j+1] = 2;
-			d = rot(i, j+1, s+1);
-		}
-		return s += max(a, max(b, max(k, d)));
+	}
+	return count;	
 }
 
 
@@ -42,14 +99,25 @@ int main(){
 			}
 		}
 		
-		int mx = INT_MIN;
-		for(int i = 0; i<r; i++){
-			for(int j = 0; j<c; j++){
-				if(m[i][j] == 2){
-					mx = max(mx, rot(i, j, 0));
-				}
-			}
-		}
+//		for(int i = 0; i<r; i++){
+//			for(int j = 0; j<c; j++){
+//				cout<<m[i][j]<<" ";
+//			}
+//			cout<<endl;
+//		}
+		
+		
+		int mx = fun();
+		
+		
+//		for(int i = 0; i<r; i++){
+//			for(int j = 0; j<c; j++){
+//				cout<<m[i][j]<<" ";
+//			}
+//			cout<<endl;
+//		}
+		
+		
 		int flag = 0;
 		for(int i = 0; i<r; i++){
 			for(int j = 0; j<c; j++){
