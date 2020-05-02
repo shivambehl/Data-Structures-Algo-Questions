@@ -1,3 +1,7 @@
+// First Non Repeating in a Stream - GeeksforGeeks
+// Link - https://practice.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream/0
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -16,7 +20,7 @@ int main(){
 			cin>>c;
 			a[c]++;
 			
-			//if(a[c] == 1)
+			if(a[c] == 1)
 				q.push(c);
 			
 			while(!q.empty() && a[q.front()] > 1){
