@@ -1,3 +1,5 @@
+// find sum of length of all subarray of distinct elements from given array
+
 #include<bits/stdc++.h>
 using namespace std;
 
