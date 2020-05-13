@@ -28,6 +28,21 @@ void sieve(){
 }
 
 
+bool isPrime(long long no){
+	if(no < n ){
+		return b[no] == 1 ? true:false;
+	}
+	
+	for(long long int i = 0; primes[i]*(long long)primes[i] <= no; i++){
+		if(no%primes[i] == 0){
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+
 
 int main(){
 	
