@@ -12,17 +12,13 @@ public:
             int len1 = expand(s, i, i);
             int len2 = expand(s, i, i+1);
             int len = max(len1, len2);
-            
             if(len > en - st){
                 st = i - (len - 1)/2;
                 en = i + len/2;
             }
         }
-        
         return s.substr(st, en - st + 1);
-        
     }
-    
     int expand(string s, int left, int right){
         int l, r;
         l = left;
@@ -31,8 +27,6 @@ public:
         while(l>=0 and r<=s.size() and s[l] == s[r]){
             l--; r++;
         }
-        
         return r - l - 1;
     }
-    
 };
